@@ -105,7 +105,16 @@
   {}
   [\vspace{1pt}\titlerule]
 
-\titlespacing{\section}{-1pt}{0.5cm}{0.3cm}
+\titlespacing{\section}{
+    % left space:
+    -1pt
+}{
+    % top space:
+    0.5 cm
+}{
+    % bottom space:
+    0.3 cm
+}
 
 % -----------------------------------------------------------
 %                  BULLET STYLES
@@ -118,19 +127,35 @@
 % -----------------------------------------------------------
 
 \newenvironment{highlights}{
-    \begin{itemize}[topsep=0.10cm, parsep=0.10cm, partopsep=0pt, itemsep=0pt, leftmargin=10pt]
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=0 cm + 10pt
+    ]
 }{
     \end{itemize}
 }
 
 \newenvironment{highlightsforbulletentries}{
-    \begin{itemize}[topsep=0.10cm, parsep=0.10cm, partopsep=0pt, itemsep=0pt, leftmargin=10pt]
+    \begin{itemize}[
+        topsep=0.10 cm,
+        parsep=0.10 cm,
+        partopsep=0pt,
+        itemsep=0pt,
+        leftmargin=10pt
+    ]
 }{
     \end{itemize}
 }
 
 \newenvironment{onecolentry}{
-    \begin{adjustwidth}{0cm}{0cm}
+    \begin{adjustwidth}{
+        0 cm + 0.00001 cm
+    }{
+        0 cm + 0.00001 cm
+    }
 }{
     \end{adjustwidth}
 }
@@ -138,7 +163,7 @@
 \newenvironment{twocolentry}[2][]{
     \onecolentry
     \def\secondColumn{#2}
-    \setcolumnwidth{\fill, 7cm}
+    \setcolumnwidth{\fill, 7 cm}
     \begin{paracol}{2}
 }{
     \switchcolumn \raggedleft \secondColumn
@@ -149,7 +174,7 @@
 \newenvironment{threecolentry}[3][]{
     \onecolentry
     \def\thirdColumn{#3}
-    \setcolumnwidth{, \fill, 4.5cm}
+    \setcolumnwidth{, \fill, 4.5 cm}
     \begin{paracol}{3}
     {\raggedright #2} \switchcolumn
 }{
