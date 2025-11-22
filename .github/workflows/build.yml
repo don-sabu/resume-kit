@@ -1,0 +1,64 @@
+name: Build Resume PDF
+
+on:
+  push:
+    branches:
+      - release
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # --- VALIDATE TAG ---
+      - name: Validate tag exists
+        run: |
+          if [[ "${GITHUB_REF}" != refs/tags/* ]]; then
+            echo "ERROR: You pushed to 'release' WITHOUT a version tag."
+            echo "Tag your commit (e.g. v2025.11.1) and push again."
+            exit 1
+          fi
+
+      # --- SET VERSION VARIABLES ---
+      - name: Extract version
+        run: |
+          echo "VERSION=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          echo "USER_NAME=${GITHUB_ACTOR}" >> $GITHUB_ENV
+
+      # --- BUILD DOCKER IMAGE ---
+      - name: Build Docker image
+        run: docker build -t resume-builder:latest .
+
+      # --- RUN LATEX BUILD INSIDE DOCKER ---
+      - name: Build PDF using LaTeX
+        run: |
+          mkdir -p build
+          docker run --rm \
+            -e TEXINPUTS="/work/src//:" \
+            -v "${{ github.workspace }}/src:/work/src" \
+            -v "${{ github.workspace }}/build:/work/build" \
+            -w /work/build \
+            resume-builder:latest \
+            latexmk -pdf -interaction=nonstopmode -output-directory=/work/build /work/src/main.tex
+
+      # --- RENAME FINAL PDF ---
+      - name: Rename PDF to include user and version
+        run: |
+          OUTPUT_NAME="${USER_NAME}_${VERSION}.pdf"
+          mv build/main.pdf "${OUTPUT_NAME}"
+          echo "OUTPUT_NAME=${OUTPUT_NAME}" >> $GITHUB_ENV
+
+      # --- CREATE OR UPDATE RELEASE ---
+      - name: Upload PDF to GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ env.OUTPUT_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
