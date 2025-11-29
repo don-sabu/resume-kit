@@ -3,7 +3,7 @@ name: Build Resume PDF
 on:
   push:
     branches:
-      - release
+      - workflow-debug
     tags:
       - 'v*'
 
