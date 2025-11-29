@@ -33,9 +33,6 @@ ENV PATH=/usr/local/texlive/2024/bin/x86_64-linux:$PATH
 ENV MANPATH=/usr/local/texlive/2024/texmf-dist/doc/man:$MANPATH
 ENV INFOPATH=/usr/local/texlive/2024/texmf-dist/doc/info:$INFOPATH
 
-# update tlmgr itself
-RUN tlmgr option repository ctan && tlmgr update --self
-
 # install common build helper and packages your resume uses
 # (we'll list packages; the list below should be enough for your main.tex)
 RUN tlmgr install \
