@@ -1,5 +1,8 @@
 name: Build Resume PDF
 
+permissions:
+  contents: write
+
 on:
   push:
     branches:
