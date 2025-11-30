@@ -81,6 +81,8 @@
         pdfkeywords={\ResumeKeywords},
         colorlinks=true,
         urlcolor=primaryColor,
+        pdfborder={0 0 0},
+        hidelinks,
         pdfproducer={Resume Kit by Don Sabu — github.com/don-sabu/resume-kit}
     }
 }
